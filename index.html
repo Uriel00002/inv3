@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Una pregunta...</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100dvh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd6e7, #ffeaf2);
+            font-family: Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Tarjeta principal */
+
+        .contenedor {
+            width: calc(100% - 20px);
+            height: calc(100dvh - 20px);
+            background: white;
+            border-radius: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mensaje */
+
+        h1 {
+            color: #e75480;
+            font-size: 38px;
+            text-align: center;
+            transition: opacity 0.4s;
+        }
+
+        /* Zona de botones */
+
+        .botones {
+            display: none;
+            position: relative;
+            width: 100%;
+            flex: 1;
+            margin-top: 20px;
+        }
+
+        .contenedor.pregunta .botones {
+            display: block;
+        }
+
+        .contenedor.pregunta {
+            justify-content: flex-start;
+            padding-top: 35px;
+        }
+
+        .contenedor.pregunta h1 {
+            margin-top: 20px;
+        }
+
+        /* Botones */
+
+        button {
+            border: none;
+            padding: 15px 35px;
+            border-radius: 25px;
+            font-size: 19px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: left 0.3s ease, top 0.3s ease,
+                transform 0.2s;
+            touch-action: manipulation;
+        }
+
+        #si {
+            background: #ff69a6;
+            color: white;
+
+            position: absolute;
+            top: 40%;
+            left: 15%;
+        }
+
+        #no {
+            background: #e5e5e5;
+            color: #555;
+
+            position: absolute;
+            top: 40%;
+            left: 60%;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        /* Mensaje para pantallas grandes */
+
+        .mensaje-pc {
+            display: none;
+        }
+
+        @media screen and (min-width: 601px) {
+
+            body {
+                background: linear-gradient(135deg, #ffd6e7, #ffeaf2);
+            }
+
+            .contenedor {
+                display: none;
+            }
+
+            .mensaje-pc {
+                display: flex;
+                width: 100%;
+                height: 100dvh;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 30px;
+            }
+
+            .mensaje-pc h1 {
+                font-size: 55px;
+                color: #e75480;
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="mensaje-pc">
+        <h1>¡ÁBRELO EN EL CELL! ❤️ JAJA</h1>
+    </div>
+
+    <div class="contenedor" id="contenedor">
+
+        <h1 id="mensaje">Ya fue mucho salvar el semestre, toca salvar algo mas....</h1>
+
+        <div class="botones" id="zonaBotones">
+
+            <button id="si">Sí ❤️</button>
+
+            <button id="no">No</button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const mensaje = document.getElementById("mensaje");
+
+        const botonSi = document.getElementById("si");
+
+        const botonNo = document.getElementById("no");
+
+        const zonaBotones = document.getElementById("zonaBotones");
+
+        const contenedor = document.getElementById("contenedor");
+
+
+        // Esperar 5 segundos para mostrar la pregunta
+
+        setTimeout(() => {
+
+            mensaje.textContent = "Irias conmigo por unos bongles?🥺";
+
+            contenedor.classList.add("pregunta");
+
+        }, 3000);
+
+
+        // Movimiento del botón NO
+
+        botonNo.addEventListener("click", () => {
+
+            const zona = zonaBotones.getBoundingClientRect();
+
+            const ancho = botonNo.offsetWidth;
+
+            const alto = botonNo.offsetHeight;
+
+            const maxX = zona.width - ancho;
+
+            const maxY = zona.height - alto;
+
+            // Posición anterior
+
+            const anteriorX = botonNo.offsetLeft;
+
+            const anteriorY = botonNo.offsetTop;
+
+            let nuevaX, nuevaY;
+
+            let distancia;
+
+            // Buscar una posición bastante alejada
+
+            do {
+
+                nuevaX = Math.random() * maxX;
+
+                nuevaY = Math.random() * maxY;
+
+                distancia = Math.sqrt(
+                    Math.pow(nuevaX - anteriorX, 2) +
+                    Math.pow(nuevaY - anteriorY, 2)
+                );
+
+            } while (
+                distancia < Math.min(zona.width, zona.height) * 0.45 ||
+                (
+                    Math.abs(nuevaX - botonSi.offsetLeft) < 120 &&
+                    Math.abs(nuevaY - botonSi.offsetTop) < 70
+                )
+            );
+
+            // Mover el botón
+
+            botonNo.style.left = nuevaX + "px";
+
+            botonNo.style.top = nuevaY + "px";
+
+        });
+
+
+        // Cuando presione SI
+
+        botonSi.addEventListener("click", () => {
+
+            mensaje.textContent = "¡Sabía que dirias que sí! Te veo... mañana?";
+
+            zonaBotones.style.display = "none";
+
+        });
+
+    </script>
+
+</body>
+
+</html>
